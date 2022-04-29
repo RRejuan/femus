@@ -268,8 +268,8 @@ void neumann_loop_2d3d(const MultiLevelProblem *    ml_prob,
 }
 
 
-//original form //f = y (1 - sqrt (x^2 + y^2)) (2 - z) (z)
-//c-form   // f = x[1] (1 - sqrt (x[0]^2 + x[1]^2)) (2 - x[2]) (x[2])   
+//original form //f = y (1 - sqrt(x^2 + y^2)) (2 - z) (z)
+//c-form   // f = x[1]*(1 - sqrt((x[0]*x[0]) + (x[1]*x[1])))*(2 - x[2])*(x[2])   
 //laplacian f = -2 y + 2 sqrt x^2 y + 2 sqrt y^3 - 16 sqrt y z + 8 sqrt y z^2
 
 double GetExactSolutionLaplace(const std::vector < double >& x) {
@@ -304,7 +304,7 @@ int main(int argc, char** args) {
    std::vector<std::string> mesh_files;
   
    
-//    mesh_files.push_back("Mesh_Assignment_semi_cylinder_hex.med");
+//    mesh_files.push_back("Mesh_Assignment_semi_cylinder_hexa.med");
    mesh_files.push_back("Mesh_Assignment_semi_cylinder_tetrahedron.med");
    
 //    mesh_files.push_back("mesh_assignment_cylinder_triang.med");
