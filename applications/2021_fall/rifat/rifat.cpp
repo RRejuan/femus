@@ -268,12 +268,16 @@ void neumann_loop_2d3d(const MultiLevelProblem *    ml_prob,
 }
 
 
-//original form //f = y (1 - sqrt(x^2 + y^2)) (2 - z) (z)
-//c-form   // f = x[1]*(1 - sqrt((x[0]*x[0]) + (x[1]*x[1])))*(2 - x[2])*(x[2])   
-//laplacian f = -2 y + 2 sqrt x^2 y + 2 sqrt y^3 - 16 sqrt y z + 8 sqrt y z^2
+//original form //f = -y (1 - sqrt(x^2 + y^2)) (2 - z) (z)
+//c-form   // f = -x[1]*(1 - sqrt((x[0]*x[0]) + (x[1]*x[1])))*(2 - x[2])*(x[2])   
+//laplacian f = 2 y - 2 sqrt x^2 y - 2 sqrt y^3 + 16 sqrt y z - 8 sqrt y z^2
+//laplacian f = 2 y (1 - sqrt (x^2 + y^2)) + 8 sqrt y (2 - z) z
+// laplacian f = 2 y (1 - sqrt (x^2 + y^2 + 4 (-2 + z) z))
 
 double GetExactSolutionLaplace(const std::vector < double >& x) {
-  double F3 = -2*x[1] + ((2*x[0]*x[0]) + (2*x[1]*x[1]) + 3*x[2]*x[2] - 6*x[2])/ sqrt(x[0]*x[0]+x[1]*x[1]);
+// double F3 = -2*x[1] + ((2*x[0]*x[0]) + (2*x[1]*x[1]) + 3*x[2]*x[2] - 6*x[2])/ sqrt(x[0]*x[0]+x[1]*x[1]);
+ //  double F3 = 2*(x[1])*(1- sqrt(x[0]*x[0] + x[1]*x[1] + 4*(-2+x[2])*x[2]));
+double F3 =  -2*(x[1])* (1 - sqrt(x[0]*x[0] + x[1]*x[1])) - 8* (sqrt(x[1]*(2 - x[2])*x[2])) ;
   return F3;
 };
 
@@ -305,7 +309,7 @@ int main(int argc, char** args) {
   
    
 //    mesh_files.push_back("Mesh_Assignment_semi_cylinder_hexa.med");
-   mesh_files.push_back("Mesh_Assignment_semi_cylinder_tetrahedron.med");
+   mesh_files.push_back("Mesh_Assignment_semi_cylinder_hexa_please_add.med");
    
 //    mesh_files.push_back("mesh_assignment_cylinder_triang.med");
 //    mesh_files.push_back("mesh_assignment_cylinder_quadrilateral.med");

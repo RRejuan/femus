@@ -20,7 +20,7 @@
 
 
 //*********************** Sets Number of refinements *****************************************
-#define N_UNIFORM_LEVELS 3
+#define N_UNIFORM_LEVELS 4
 #define N_ERASED_LEVELS   N_UNIFORM_LEVELS - 1
 
 
@@ -37,7 +37,7 @@
 #define BETA_CTRL_BDRY   ALPHA_CTRL_BDRY
 
 // for lifting approaches (both internal and external)
-#define ALPHA_CTRL_VOL 0.01 
+#define ALPHA_CTRL_VOL 0.005 
 #define BETA_CTRL_VOL ALPHA_CTRL_VOL
 
 
@@ -48,7 +48,7 @@
 
 
 //*********************** Lifting internal extension *******************************************************
-#define LIFTING_INTERNAL_DEPTH  0.5
+#define LIFTING_INTERNAL_DEPTH  0.25
 #define LIFTING_INTERNAL_WIDTH_LOWER  GAMMA_CONTROL_LOWER
 #define LIFTING_INTERNAL_WIDTH_UPPER  GAMMA_CONTROL_UPPER
 
@@ -310,7 +310,7 @@ int ControlDomainFlag_external_restriction(const std::vector<double> & elem_cent
 
         for (unsigned i = 0; i < sol_actflag.size(); i++) {
             unsigned solDof_mu = msh->GetSolutionDof(i, iel, solFEType_act_flag);
-            (sol->_Sol[solIndex_act_flag])->set(solDof_mu,sol_actflag[i]);
+            (sol->_Sol[solIndex_act_flag])->set(solDof_mu, sol_actflag[i]);
         }
 
 }

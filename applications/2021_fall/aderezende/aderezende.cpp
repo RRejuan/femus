@@ -23,7 +23,7 @@ using namespace femus;
 /// @todo Laplace beltrami on a flat domain does not give the same numbers, need to check that
 
 // Right-hand side for Dirichlet BC.
-double minus_Deltu_U0(const std::vector<double> & x_qp){
+double quarter_cylinder__laplacian__rhs(const std::vector<double> & x_qp){
     
     // Quarter cylinder of radius 1 and length 2
     
@@ -31,7 +31,7 @@ double minus_Deltu_U0(const std::vector<double> & x_qp){
     double y = x_qp[1];
     double z = x_qp[2];
     
-    // Function = x*y*z*(2.0-z)*(pow(x,2.0) + pow(y,2.0) - 1.0)
+    // Function = x*y*z*(z-2.0)*(x*x + y*y - 1.0)
     
     // Return -Delta U0
     return -( 12.0 * x * y * z * (z - 2.0) + 2 * x * y * ( x * x + y * y ) );
@@ -47,13 +47,11 @@ double InitialValueU(const MultiLevelProblem * ml_prob, const std::vector < doub
 
  
  
-bool SetBoundaryCondition(const MultiLevelProblem * ml_prob, const std::vector < double >& x, const char name[], double& value, const int face_name, const double time) {
+bool quarter_cylinder__laplacian__bc(const MultiLevelProblem * ml_prob, const std::vector < double >& x, const char name[], double& value, const int face_name, const double time) {
 
   bool dirichlet = false;
   value = 0.;
-  
-  const double tolerance = 1.e-5;
-  
+    
 
  if (ml_prob->GetMLMesh()->GetDimension() == 3 )  {
      
@@ -283,7 +281,8 @@ int main(int argc, char** args) {
    std::vector<std::string> mesh_files;
    
     //mesh_files.push_back("assignment_quarter_cylinder_tetra.med");
-    mesh_files.push_back("assignment_quarter_cylinder_hexa.med");
+    //mesh_files.push_back("assignment_quarter_cylinder_hexa.med");
+    mesh_files.push_back("assignment_quarter_cylinder_divided_quad.med");
     //mesh_files.push_back("assignment_quarter_cylinder_hexa_old.med");
    //mesh_files.push_back("Mesh_1_x_dir_neu_fine.med");
 //    mesh_files.push_back("Mesh_2_xy_boundaries_groups_4x4.med");
@@ -346,7 +345,7 @@ int main(int argc, char** args) {
   ml_sol.Initialize("u", InitialValueU, & ml_prob);
 
   // ======= Solution: Boundary Conditions ==================
-  ml_sol.AttachSetBoundaryConditionFunction(SetBoundaryCondition);
+  ml_sol.AttachSetBoundaryConditionFunction(quarter_cylinder__laplacian__bc);
   ml_sol.GenerateBdc("u", "Steady",  & ml_prob);
 
   
@@ -611,7 +610,7 @@ void AssembleProblemDirNeu(MultiLevelProblem& ml_prob) {
 	      
 //======================Residuals=======================
           // FIRST ROW
-          if (i < nDof_u)                      Res[0      + i] +=  jacXweight_qp * ( phi_u[i] * ( minus_Deltu_U0(x_qp) ) - laplace_res_du_u_i);
+          if (i < nDof_u)                      Res[0      + i] +=  jacXweight_qp * ( phi_u[i] * ( quarter_cylinder__laplacian__rhs(x_qp) ) - laplace_res_du_u_i);
 //======================Residuals=======================
 	      
           if (assembleMatrix) {
